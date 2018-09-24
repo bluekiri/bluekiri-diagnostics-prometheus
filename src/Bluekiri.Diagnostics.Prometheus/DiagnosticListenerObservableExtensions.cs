@@ -14,6 +14,11 @@ namespace Bluekiri.Diagnostics.Prometheus
                 {
                     listener.Subscribe(new HttpHandlerDiagnosticListenerObserver());
                 }
+
+                if (listener.Name == "Microsoft.AspNetCore")
+                {
+                    listener.Subscribe(new AspNetCoreDiagnosticListenerObserver());
+                }
             });
         }
     }
