@@ -11,24 +11,25 @@ namespace Bluekiri.Diagnostics.Prometheus
         private readonly PropertyFetcher _requestFetcher;
         private readonly PropertyFetcher _responseFetcher;
         private readonly Counter _requestCounter;
-        private readonly Counter _requestTimeCounter;
+        private readonly Summary _requestSummary;
 
         public HttpHandlerDiagnosticListenerObserver()
         {
             _requestFetcher = new PropertyFetcher("Request");
             _responseFetcher = new PropertyFetcher("Response");
 
-            _requestCounter = Metrics.CreateCounter("http_requests", "HTTP Requests Count", 
+            _requestCounter = Metrics.CreateCounter("http_requests", "Outgoing HTTP Requests Count", 
                 new CounterConfiguration
                 {
+                    SuppressInitialValue = true,
                     LabelNames = new[] { "host", "method", "endpoint", "status" }
                 });
-            
-            _requestTimeCounter = Metrics.CreateCounter("http_requests_time", "HTTP Requests Count", 
-                new CounterConfiguration
-                {
-                    LabelNames = new[] { "host", "method", "endpoint", "status" }
-                });
+
+            _requestSummary = Metrics.CreateSummary("http_requests_time", "Response times in milliseconds", new SummaryConfiguration
+            {
+                SuppressInitialValue = true,
+                LabelNames = new[] { "host", "method", "endpoint", "status" }
+            });
         }
 
         public void OnCompleted()
@@ -51,17 +52,13 @@ namespace Bluekiri.Diagnostics.Prometheus
                     
                     var statusCode = response != null ? response.StatusCode.ToString() : "Unknown";
                     
-                    _requestCounter.WithLabels(
-                            request.RequestUri.Host, 
-                            request.Method.Method, 
-                            request.RequestUri.PathAndQuery,
-                            statusCode).Inc();                    
+                    _requestCounter
+                        .WithLabels(request.RequestUri.Host, request.Method.Method, request.RequestUri.PathAndQuery, statusCode)
+                        .Inc();                    
 
-                    _requestTimeCounter.WithLabels(
-                            request.RequestUri.Host, 
-                            request.Method.Method, 
-                            request.RequestUri.PathAndQuery,
-                            statusCode).Inc(Activity.Current.Duration.TotalMilliseconds);
+                    _requestSummary
+                        .WithLabels(request.RequestUri.Host, request.Method.Method, request.RequestUri.PathAndQuery, statusCode)
+                        .Observe(Activity.Current.Duration.TotalMilliseconds);
                     break;
                 default:
                     return;
