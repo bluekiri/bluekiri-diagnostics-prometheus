@@ -18,14 +18,14 @@ namespace Bluekiri.Diagnostics.Prometheus
             _requestFetcher = new PropertyFetcher("Request");
             _responseFetcher = new PropertyFetcher("Response");
 
-            _requestCounter = Metrics.CreateCounter("http_requests", "Outgoing HTTP Requests Count", 
+            _requestCounter = Metrics.CreateCounter("outgoing_http_requests", "Outgoing HTTP Requests Count", 
                 new CounterConfiguration
                 {
                     SuppressInitialValue = true,
                     LabelNames = new[] { "host", "method", "endpoint", "status" }
                 });
 
-            _requestSummary = Metrics.CreateSummary("http_requests_time", "Response times in milliseconds", new SummaryConfiguration
+            _requestSummary = Metrics.CreateSummary("outgoing_http_requests_time", "Response times in milliseconds", new SummaryConfiguration
             {
                 SuppressInitialValue = true,
                 LabelNames = new[] { "host", "method", "endpoint", "status" }
