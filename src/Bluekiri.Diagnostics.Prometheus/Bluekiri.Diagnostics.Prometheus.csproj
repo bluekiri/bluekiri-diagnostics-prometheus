@@ -1,12 +1,27 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Bluekiri.Diagnostics.Prometheus</AssemblyName>
+    <PackageId>Bluekiri.Diagnostics.Prometheus</PackageId>
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <PackageIconUrl>https://bluekiri.com/images/ms-icon-70x70.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/bluekiri/bluekiri-diagnostics-prometheus</RepositoryUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>    
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
     <PackageReference Include="Microsoft.Extensions.DiagnosticAdapter" Version="2.1.0" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="prometheus-net" Version="2.1.2" />
     <PackageReference Include="prometheus-net.AspNetCore" Version="2.1.2" />
     <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="4.5.0" />
