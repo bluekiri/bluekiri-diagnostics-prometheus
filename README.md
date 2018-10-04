@@ -40,3 +40,6 @@ Currently, we exponse events from the following sources
 
 ## Contributing
 Your help is always welcome. You can contribute to this project opening issues reporting bugs or new feature requests, or by sending pull requests to our development branch for new features, or to our master branch for bug fixes.
+
+## License
+This project is licensed under [MIT License](LICENSE.md)
