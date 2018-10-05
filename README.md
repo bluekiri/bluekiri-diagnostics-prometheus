@@ -1,6 +1,7 @@
 
-[![Build status Development](https://toolfactory.visualstudio.com/Core/_apis/build/status/Mectrics%20Libraries/Bluekiri.Diagnostics.Prometheus-development-CI)](https://toolfactory.visualstudio.com/Core/_build/latest?definitionId=0)
-[![Build status Master](https://toolfactory.visualstudio.com/Core/_apis/build/status/Mectrics%20Libraries/Bluekiri.Diagnostics.Prometheus-CI)](https://toolfactory.visualstudio.com/Core/_build/latest?definitionId=772)
+[![Build status](https://toolfactory.visualstudio.com/Core/_apis/build/status/Mectrics%20Libraries/Bluekiri.Diagnostics.Prometheus-CI?branchName=development)](https://toolfactory.visualstudio.com/Core/_build/latest?definitionId=773)
+
+[![Build status](https://toolfactory.visualstudio.com/Core/_apis/build/status/Mectrics%20Libraries/Bluekiri.Diagnostics.Prometheus-CI?branchName=master)](https://toolfactory.visualstudio.com/Core/_build/latest?definitionId=773)
 
 # bluekiri-diagnostics-prometheus
 This library is meant to expose DiagnosticSource events as Prometheus metrics using [prometheus-net](https://github.com/prometheus-net/prometheus-net).
