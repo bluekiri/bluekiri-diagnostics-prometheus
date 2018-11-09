@@ -27,6 +27,16 @@ namespace SampleDiagnosedApi.Controllers
             response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-        }        
+        }
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<string>> Get(int id)
+        {
+            var client = _factory.CreateClient("JsonPlaceholder");
+            var response = await client.GetAsync($"/todos/{id}").ConfigureAwait(false);
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        }
     }
 }
