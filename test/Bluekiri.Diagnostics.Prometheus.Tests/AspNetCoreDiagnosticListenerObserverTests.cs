@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Prometheus;
+using Prometheus.Advanced;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -60,6 +61,8 @@ namespace Bluekiri.Diagnostics.Prometheus.Tests
             Assert.AreEqual(1, counterMetrics.First().metric[0].counter.value);
             Assert.AreEqual(1, summaryMetrics.First().metric.Count);
             Assert.IsNotNull(summaryMetrics.First().metric[0].summary);
+
+            
         }
 
 
@@ -68,17 +71,23 @@ namespace Bluekiri.Diagnostics.Prometheus.Tests
         {
             // Arrange
             var observer = new AspNetCoreDiagnosticListenerObserver();
-            var listener = new DiagnosticListener("TestListener");
+
+            var registry = new DefaultCollectorRegistry();
+            var factory = Metrics.WithCustomRegistry(registry);
+
+            var listener = new DiagnosticListener("TestListener2");
             listener.Subscribe(observer);
+    
+            
 
             var context = new DefaultHttpContext();
             context.Request.Method = "GET";
-            context.Request.Path = new PathString("/api/test");
+            context.Request.Path = new PathString("/api/test2");
             context.Response.StatusCode = 200;
 
             var httpConnectionFeature = new HttpConnectionFeature
             {
-                ConnectionId = "1234"
+                ConnectionId = "12345"
             };
             context.Features.Set<IHttpConnectionFeature>(httpConnectionFeature);
 
@@ -101,10 +110,10 @@ namespace Bluekiri.Diagnostics.Prometheus.Tests
 
             var counterMetrics = requestCounter.Collect();
             var summaryMetrics = requestSummary.Collect();
+            
+            
 
-            Assert.AreEqual(1, counterMetrics.First().metric.Count);
-            Assert.AreEqual(1, counterMetrics.First().metric[0].counter.value);
-            Assert.AreEqual(1, summaryMetrics.First().metric.Count);
+            Assert.IsTrue(counterMetrics.First().metric.Any(p => p.label[1].value == "/"));
             Assert.IsNotNull(summaryMetrics.First().metric[0].summary);
 
         }
