@@ -3,7 +3,7 @@
 
 # bluekiri-diagnostics-prometheus
 This library is meant to expose DiagnosticSource events as Prometheus metrics using [prometheus-net](https://github.com/prometheus-net/prometheus-net).
-Currently, we expose events from the following sources:
+Currently, we provide observers to expose metrics from these sources:
 
  - HttpHandlerDiagnosticListener. This source logs the events of outgoing HTTP connections made with HttpClient.
  - Microsoft.AspNetCore. This source logs events coming from de ASP.NET Core pipeline.
@@ -24,9 +24,13 @@ Currently, we expose events from the following sources:
         var metricsServer = new KestrelMetricServer(9303);
         metricsServer.Start();
 
-        // Subscribe the diagnostic listeners that will
-        // export Prometheus metrics		
-        DiagnosticListener.AllListeners.SubscribeDiagnosticListener();
+        // Subscribe the observers that will
+        // export Prometheus metrics from AspNetCore and HttpClient related Diagnostic Sources
+        DiagnosticListener.AllListeners.SubscribeDiagnosticListener(o => 
+        {
+            o.AddAspNetCoreObserver();
+            o.AddHttpHandlerObserver();            
+        });
 
         CreateWebHostBuilder(args).Build().Run();
      }
@@ -44,8 +48,8 @@ public static void Main(string[] args)
     metricsServer.Start();
 
     // Subscribe YourObserver for the specified Diagnostic Listener.
-    // This method also adds the default observers added with SubscribeDiagnosticListener() extension method
-    DiagnosticListener.AllListeners.SubscribeDiagnosticListener(o => {
+    DiagnosticListener.AllListeners.SubscribeDiagnosticListener(o => 
+    {
         o.AddSubscriber("TheDiagnosticListenerNameYouWantToSubscribeTo", new YourObserver());
     });
 
