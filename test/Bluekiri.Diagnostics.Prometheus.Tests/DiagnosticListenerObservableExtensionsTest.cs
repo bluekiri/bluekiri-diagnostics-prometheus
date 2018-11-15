@@ -85,7 +85,11 @@ namespace Bluekiri.Diagnostics.Prometheus.Tests
 
             diagnosticListenerObservable.AddListener(httpClientDiagnosticListener);
             diagnosticListenerObservable.AddListener(aspNetCoreDiagnosticListener);
-            diagnosticListenerObservable.SubscribeDiagnosticListener();
+            diagnosticListenerObservable.SubscribeDiagnosticListener(c =>
+            {
+                c.AddAspNetCoreObserver();
+                c.AddHttpHandlerObserver();
+            });
 
             // Act
 
