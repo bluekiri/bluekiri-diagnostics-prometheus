@@ -53,19 +53,23 @@ namespace Bluekiri.Diagnostics.Prometheus
             string connectionId;
 
             switch (kvp.Key)
-            {                
-               
+            {
+
                 case "Microsoft.AspNetCore.Mvc.AfterAction":
 
                     context = (HttpContext)_contextFetcherAfterAction.Fetch(kvp.Value);
-                    routeData =(RouteData) _routeFetcher.Fetch(kvp.Value);
+                    routeData = (RouteData)_routeFetcher.Fetch(kvp.Value);
+                    if (context == null)
+                    {
+                        break;
+                    }
 
-                    if (context != null && routeData!=null)
+                    pathValue = context.Request.Path.Value;
+
+                    if (routeData != null)
                     {
                         var controllerValue = string.Empty;
                         var actionValue = string.Empty;
-
-
                         if (routeData.Values.ContainsKey("controller"))
                         {
                             controllerValue = routeData.Values["controller"]?.ToString();
@@ -74,20 +78,18 @@ namespace Bluekiri.Diagnostics.Prometheus
                         {
                             actionValue = routeData.Values["action"]?.ToString();
                         }
-
                         pathValue = $"{controllerValue}/{actionValue}";
-
-                        _requestCounter
-                            .WithLabels(context.Request.Method, pathValue, context.Response.StatusCode.ToString())
-                            .Inc();
-
-                        connectionId = context.Features.Get<Microsoft.AspNetCore.Http.Features.IHttpConnectionFeature>()?.ConnectionId;
-                        if(!string.IsNullOrEmpty(connectionId))
-                        {
-                            _requestPaths.TryAdd(connectionId, pathValue);
-                        }                        
                     }
 
+                    _requestCounter
+                        .WithLabels(context.Request.Method, pathValue, context.Response.StatusCode.ToString())
+                        .Inc();
+
+                    connectionId = context.Features.Get<Microsoft.AspNetCore.Http.Features.IHttpConnectionFeature>()?.ConnectionId;
+                    if (!string.IsNullOrEmpty(connectionId))
+                    {
+                        _requestPaths.TryAdd(connectionId, pathValue);
+                    }
                     break;
 
                 case "Microsoft.AspNetCore.Hosting.HttpRequestIn.Stop":
@@ -95,25 +97,20 @@ namespace Bluekiri.Diagnostics.Prometheus
 
                     connectionId = context.Features.Get<Microsoft.AspNetCore.Http.Features.IHttpConnectionFeature>()?.ConnectionId;
 
-                    if (string.IsNullOrEmpty(connectionId))
+                    if (string.IsNullOrEmpty(connectionId) || !_requestPaths.TryRemove(connectionId, out pathValue))
                     {
                         break;
                     }
 
-                    if (!_requestPaths.TryRemove(connectionId, out pathValue))
-                    {
-                        break;
-                    }
-                    
                     _requestSummary
                         .WithLabels(context.Request.Method, pathValue, context.Response.StatusCode.ToString())
                         .Observe(Activity.Current.Duration.TotalMilliseconds);
-                   
+
                     break;
                 default:
                     break;
             }
         }
-       
+
     }
 }
