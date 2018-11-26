@@ -18,7 +18,11 @@ namespace SampleDiagnosedApi
             // Subscribe the diagnostic listeners that will
             // export Prometheus metrics
             DiagnosticListener.AllListeners
-                .SubscribeDiagnosticListener();
+                .SubscribeDiagnosticListener(o =>
+                {
+                    o.AddAspNetCoreObserver();
+                    o.AddHttpHandlerObserver();
+                });
 
             CreateWebHostBuilder(args).Build().Run();
         }
