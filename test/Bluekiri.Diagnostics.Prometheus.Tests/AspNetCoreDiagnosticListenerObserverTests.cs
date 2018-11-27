@@ -113,7 +113,7 @@ namespace Bluekiri.Diagnostics.Prometheus.Tests
             
             
 
-            Assert.IsTrue(counterMetrics.First().metric.Any(p => p.label[1].value == "/"));
+            Assert.IsTrue(counterMetrics.First().metric.Any(p => p.label[1].value == "/api/test2"));
             Assert.IsNotNull(summaryMetrics.First().metric[0].summary);
 
         }
