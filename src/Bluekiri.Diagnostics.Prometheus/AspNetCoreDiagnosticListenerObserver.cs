@@ -78,7 +78,10 @@ namespace Bluekiri.Diagnostics.Prometheus
                         {
                             actionValue = routeData.Values["action"]?.ToString();
                         }
-                        pathValue = $"{controllerValue}/{actionValue}";
+                        if (!string.IsNullOrEmpty(controllerValue) && !string.IsNullOrEmpty(actionValue))
+                        {
+                            pathValue = $"{controllerValue}/{actionValue}";
+                        }
                     }
 
                     _requestCounter
