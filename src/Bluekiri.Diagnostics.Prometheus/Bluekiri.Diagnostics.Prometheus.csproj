@@ -3,8 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Bluekiri.Diagnostics.Prometheus</AssemblyName>
-    <PackageId>Bluekiri.Diagnostics.Prometheus</PackageId>
-    <VersionPrefix>1.2.0</VersionPrefix>
+    <PackageId>Bluekiri.Diagnostics.Prometheus</PackageId>    
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
