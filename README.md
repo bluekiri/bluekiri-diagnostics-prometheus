@@ -62,7 +62,7 @@ public static void Main(string[] args)
 - [HttpDiagnostics Guide](https://github.com/dotnet/corefx/blob/master/src/System.Net.Http/src/HttpDiagnosticsGuide.md)
 
 ## Contributing
-Your help is always welcome. You can contribute to this project opening issues reporting bugs or new feature requests, or by sending pull requests with new features or bug fixes.
+Your help is always welcome. You can contribute to this project opening issues reporting bugs or new feature requests, or by sending pull requests with new features or bug fixes. Thanks.
 
 ## License
 This project is licensed under [MIT License](LICENSE.md)
